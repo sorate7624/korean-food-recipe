@@ -12,6 +12,7 @@ export const RecipeSearch = () => {
   const [showMessage, setShowMessage] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
+  const [initButton, setInitButton] = useState(false);
 
   const handleSearch = async () => {
     if (searchTerm.trim() === '') {
@@ -31,6 +32,7 @@ export const RecipeSearch = () => {
       } else {
         setSearchResults(filteredResults);
         setShowMessage(false);
+        setInitButton((prevInitButton) => !prevInitButton);
       }
       setFilteredData([]);
     } catch (error) {
@@ -69,21 +71,23 @@ export const RecipeSearch = () => {
 
   const handleLinkClick = () => {
     handleScrollTopClick();
+    setShowMessage(false);
     setSearchTerm('');
     setSearchResults([]);
     setFilteredData([]);
-    setShowMessage(false);
+    setInitButton((prevInitButton) => !prevInitButton);
   };
 
-  const handleFilteredDataChange = (data) => {
+  const handleFilteredDataChange = (data, searchTerm) => {
     setFilteredData(data);
+    setSearchTerm(searchTerm);
     setSearchResults([]);
   };
 
   return (
     <>
       <div
-        className={`fixed top-0 left-1/2 translate-x-[-50%] w-full h-auto z-20 pt-[50px] px-8 ${
+        className={`fixed top-0 left-1/2 translate-x-[-50%] w-full h-auto z-20 pt-[50px] px-8 pb-[15px] ${
           showScrollTop && `bg-white/80`
         }`}
       >
@@ -101,7 +105,8 @@ export const RecipeSearch = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-full h-full bg-white outline-0 font-medium text-slate-950"
+            placeholder="음식을 입력하세요"
+            className="w-full h-full bg-white outline-0 font-medium text-slate-950 focus:placeholder-transparent "
           />
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
@@ -110,14 +115,18 @@ export const RecipeSearch = () => {
             className="text-korean-blue"
           />
         </div>
-        <Filter onFilteredDataChange={handleFilteredDataChange} />
+        <Filter
+          onFilteredDataChange={handleFilteredDataChange}
+          initButton={initButton}
+          setShowMessage={setShowMessage}
+        />
       </div>
       {showMessage ? (
-        <p className="text-center font-medium text-xl mt-60 text-korean-red">
+        <p className="text-center font-medium text-xl mt-64 text-korean-red">
           해당되는 레시피가 없습니다.
         </p>
       ) : (
-        <div className="flex flex-wrap justify-evenly mt-60 mb-48">
+        <div className="flex flex-wrap justify-evenly mt-64 mb-48">
           {searchResults.map((recipe) => (
             <RecipeCard key={recipe.RCP_SEQ} recipe={recipe} />
           ))}

@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react';
 
-export const Filter = ({ onFilteredDataChange }) => {
+export const Filter = ({
+  onFilteredDataChange,
+  initButton,
+  setShowMessage,
+}) => {
   const [method, setMethod] = useState([]);
   const [allData, setAllData] = useState([]);
+  const [selectedButton, setSelectedButton] = useState(null);
 
   const showFilter = async () => {
     try {
@@ -23,9 +28,23 @@ export const Filter = ({ onFilteredDataChange }) => {
     showFilter();
   }, []);
 
+  useEffect(() => {
+    setSelectedButton(null);
+  }, [initButton]);
+
+  const handleScrollTopClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
   const handleButtonClick = (item) => {
     const filteredItems = allData.filter((recipe) => recipe.RCP_PAT2 === item);
-    onFilteredDataChange(filteredItems);
+    onFilteredDataChange(filteredItems, '');
+    setSelectedButton(item);
+    handleScrollTopClick();
+    setShowMessage(false);
   };
 
   return (
@@ -35,7 +54,12 @@ export const Filter = ({ onFilteredDataChange }) => {
           <button
             key={index}
             onClick={() => handleButtonClick(item)}
-            className="text-white font-semibold rounded-xl  bg-gradient-to-r from-[#0BA3AB] to-[#333C7A] mr-2 mb-2 ease-out duration-300 border-4 border-white hover:border-[#0BA3AB] hover:bg-none hover:text-korean-teal hover:border-[#0BA3AB]"
+            className={`text-white font-semibold rounded-xl bg-gradient-to-r from-[#0BA3AB] to-[#333C7A] mr-2 mb-2 ease-out duration-300 border-4 border-white hover:border-[#0BA3AB] hover:bg-none hover:text-korean-teal hover:border-[#0BA3AB] 
+            ${
+              selectedButton === item
+                ? 'bg-none !border-[#0BA3AB] !text-korean-teal'
+                : ''
+            }`}
           >
             {item}
           </button>
