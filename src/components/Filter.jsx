@@ -30,7 +30,7 @@ export const Filter = ({ onFilteredDataChange }) => {
 
   return (
     <>
-      <div className="fixed top-[210px] left-0 w-full">
+      <div className="w-full mt-5">
         {method.map((item, index) => (
           <button
             key={index}

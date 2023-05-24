@@ -83,11 +83,11 @@ export const RecipeSearch = () => {
   return (
     <>
       <div
-        className={`fixed top-0 left-1/2 translate-x-[-50%] w-full h-auto z-20 pt-[50px] pb-20 px-8 ${
+        className={`fixed top-0 left-1/2 translate-x-[-50%] w-full h-auto z-20 pt-[50px] px-8 ${
           showScrollTop && `bg-white/80`
         }`}
       >
-        <h1 className="font-bold text-6xl mb-9">
+        <h1 className="font-bold text-5xl mb-9 sm:text-6xl">
           <Link
             onClick={handleLinkClick}
             className="text-korean-blue hover:text-korean-blue"
