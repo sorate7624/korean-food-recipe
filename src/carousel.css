@@ -1,0 +1,78 @@
+/* custom carousel */
+.carousel.carousel-slider {
+  overflow: inherit;
+}
+
+.carousel .slide img {
+  height: 205px;
+}
+
+.carousel.carousel-slider .control-arrow {
+  width: 30px;
+  height: 205px;
+  padding: 0;
+  opacity: 1;
+}
+
+.carousel .control-prev.control-arrow {
+  left: -30px;
+}
+
+.carousel .control-next.control-arrow {
+  right: -30px;
+}
+
+.carousel.carousel-slider .control-arrow:before,
+.carousel.carousel-slider .control-arrow:after {
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+}
+
+.carousel.carousel-slider .control-arrow:hover {
+  background: none;
+}
+
+.carousel .control-prev.control-arrow:before {
+  border-right: 12px solid #F2C25B;
+}
+
+.carousel .control-next.control-arrow:before {
+  border-left: 12px solid #F2C25B;
+}
+
+.carousel .control-dots .dot {
+  width: 12px;
+  height: 12px;
+  margin: 0 8px;
+  box-shadow: none;
+  opacity: 1;
+  background-color: rgba(255,255,255);
+}
+
+.carousel .control-dots .dot.selected,
+.carousel .control-dots .dot:hover {
+  background-color: #F2C25B;
+}
+
+.carousel .control-dots {
+  bottom: -10px;
+  margin: 0;
+}
+
+.carousel .thumb {
+  height: 55px;
+  border-radius: 0.75rem;
+}
+
+.carousel .thumb.selected,
+.carousel .thumb:hover {
+  border: 3px solid #F2C25B;
+}
+
+.carousel .thumbs-wrapper .control-arrow {
+  display: none;
+}
+
+.carousel .carousel-status {
+  font-size: 12px;
+}
