@@ -13,7 +13,7 @@ export const ScrollTop = () => {
     <FontAwesomeIcon
       icon={faCircleUp}
       size="3x"
-      className="fixed bottom-7 right-5 text-korean-yellow cursor-pointer z-10 hover:text-korean-red"
+      className="fixed bottom-7 right-5 text-korean-yellow cursor-pointer z-20 hover:text-korean-red"
       onClick={handleScrollTopClick}
     />
   );

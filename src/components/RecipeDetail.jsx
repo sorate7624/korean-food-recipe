@@ -1,4 +1,4 @@
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,14 +6,16 @@ import { faCircleXmark, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import '../../src/carousel.css';
 import { LazyImage } from './LazyImage';
 
-export const RecipeDetail = ({ recipe, onClose }) => {
+export const RecipeDetail = ({ selectedRecipe }) => {
+  const [showDetail, setShowDetail] = useState(false);
+
   const renderManualImages = () => {
     const manualImages = [];
 
     for (let index = 1; index <= 9; index++) {
       const imgKey = index < 10 ? `0${index}` : index.toString();
-      const imgSrc = recipe[`MANUAL_IMG${imgKey}`];
-      const description = recipe[`MANUAL${imgKey}`];
+      const imgSrc = selectedRecipe[`MANUAL_IMG${imgKey}`];
+      const description = selectedRecipe[`MANUAL${imgKey}`];
       if (!imgSrc) {
         break;
       }
@@ -24,7 +26,7 @@ export const RecipeDetail = ({ recipe, onClose }) => {
               <img
                 className="w-full h-full rounded-xl brightness-[0.3] bg-white hover:brightness-100"
                 src="/cutlery.png"
-                alt={recipe.RCP_NM}
+                alt={selectedRecipe.RCP_NM}
               />
             }
           >
@@ -55,7 +57,7 @@ export const RecipeDetail = ({ recipe, onClose }) => {
 
     for (let index = 1; index <= 9; index++) {
       const imgKey = index < 10 ? `0${index}` : index.toString();
-      const imgSrc = recipe[`MANUAL_IMG${imgKey}`];
+      const imgSrc = selectedRecipe[`MANUAL_IMG${imgKey}`];
 
       if (!imgSrc) {
         break;
@@ -66,52 +68,65 @@ export const RecipeDetail = ({ recipe, onClose }) => {
     return thumbsImages;
   };
 
+  const handleClose = () => {
+    setShowDetail(false);
+    setIngredient(false);
+  };
+
+  useEffect(() => {
+    setShowDetail(true);
+  }, [selectedRecipe]);
+
   return (
     <>
-      <div className="fixed flex w-full h-full z-30 top-0 left-0 bg-black bg-opacity-80 items-center justify-center">
-        <div className="relative w-96 max-w-[calc(100%-80px)] h-auto max-h-[calc(100%-80px)] overflow-auto bg-slate-200 rounded-xl p-8 shadow-lg">
-          <h4 className="w-[calc(100%-30px)] text-korean-teal font-semibold text-2xl mb-7 text-left">
-            {recipe.RCP_NM}
-          </h4>
-          <FontAwesomeIcon
-            icon={faCircleXmark}
-            size="2x"
-            className="absolute top-8 right-6 w-7 h-7  border-none p-0 text-gray-500 hover:cursor-pointer hover:text-korean-teal"
-            onClick={onClose}
-          />
-          <button
-            onClick={handleClick}
-            className="w-full text-left bg-transparent p-0 mb-2 border-0"
-          >
+      {showDetail && (
+        <div className="fixed flex w-full h-full z-30 top-0 left-0 bg-black bg-opacity-80 items-center justify-center">
+          <div className="relative w-96 max-w-[calc(100%-80px)] h-auto max-h-[calc(100%-80px)] overflow-auto bg-slate-200 rounded-xl p-8 shadow-lg">
+            <h4 className="w-[calc(100%-30px)] text-korean-teal font-semibold text-2xl mb-7 text-left">
+              {selectedRecipe.RCP_NM}
+            </h4>
             <FontAwesomeIcon
-              icon={faCaretRight}
-              className={`mr-1 ${ingredient && 'rotate-90'}`}
+              icon={faCircleXmark}
+              size="2x"
+              className="absolute top-8 right-6 w-7 h-7  border-none p-0 text-gray-500 hover:cursor-pointer hover:text-korean-teal"
+              onClick={handleClose}
             />
-            {ingredient ? '재료 접기' : '재료 펼치기'}
-          </button>
-          {ingredient && (
-            <div className="mb-6">
-              <div className="text-left text-sm mb-5 break-all">
-                <span>재료: </span>
-                {recipe.RCP_PARTS_DTLS}
+            <button
+              onClick={handleClick}
+              className="w-full text-left bg-transparent p-0 mb-2 border-0"
+            >
+              <FontAwesomeIcon
+                icon={faCaretRight}
+                className={`mr-1 ${ingredient && 'rotate-90'}`}
+              />
+              {ingredient ? '재료 접기' : '재료 펼치기'}
+            </button>
+            {ingredient && (
+              <div className="mb-6">
+                <div className="text-left text-sm mb-5 break-all">
+                  <span>재료: </span>
+                  {selectedRecipe.RCP_PARTS_DTLS}
+                </div>
+                <div className="flex justify-between text-sm mb-2">
+                  <p>{`탄수화물: ${selectedRecipe.INFO_CAR}g`}</p>
+                  <p>{`단백질: ${selectedRecipe.INFO_PRO}g`}</p>
+                  <p>{`지방: ${selectedRecipe.INFO_FAT}g`}</p>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <p>{`나트륨: ${selectedRecipe.INFO_NA}mg`}</p>
+                  <p>{`열량: ${selectedRecipe.INFO_ENG}kcal`}</p>
+                  {selectedRecipe.INFO_WGT && (
+                    <p>중량: {selectedRecipe.INFO_WGT}g</p>
+                  )}
+                </div>
               </div>
-              <div className="flex justify-between text-sm mb-2">
-                <p>{`탄수화물: ${recipe.INFO_CAR}g`}</p>
-                <p>{`단백질: ${recipe.INFO_PRO}g`}</p>
-                <p>{`지방: ${recipe.INFO_FAT}g`}</p>
-              </div>
-              <div className="flex justify-between text-sm">
-                <p>{`나트륨: ${recipe.INFO_NA}mg`}</p>
-                <p>{`열량: ${recipe.INFO_ENG}kcal`}</p>
-                {recipe.INFO_WGT && <p>중량: {recipe.INFO_WGT}g</p>}
-              </div>
-            </div>
-          )}
-          <Carousel renderThumbs={renderCustomThumbs}>
-            {renderManualImages()}
-          </Carousel>
+            )}
+            <Carousel renderThumbs={renderCustomThumbs}>
+              {renderManualImages()}
+            </Carousel>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

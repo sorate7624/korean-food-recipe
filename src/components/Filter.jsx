@@ -1,15 +1,11 @@
 import { useState, useEffect } from 'react';
 
-export const Filter = ({
-  onFilteredDataChange,
-  initButton,
-  setShowMessage,
-}) => {
+export const Filter = ({ onFilteredDataChange, initButton }) => {
   const [method, setMethod] = useState([]);
   const [allData, setAllData] = useState([]);
   const [selectedButton, setSelectedButton] = useState(null);
 
-  const showFilter = async () => {
+  const showFilterButton = async () => {
     try {
       const response = await fetch('./recipe.json');
       const data = await response.json();
@@ -25,7 +21,7 @@ export const Filter = ({
   };
 
   useEffect(() => {
-    showFilter();
+    showFilterButton();
   }, []);
 
   useEffect(() => {
@@ -44,7 +40,6 @@ export const Filter = ({
     onFilteredDataChange(filteredItems, '');
     setSelectedButton(item);
     handleScrollTopClick();
-    setShowMessage(false);
   };
 
   return (
