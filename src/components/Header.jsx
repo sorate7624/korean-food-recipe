@@ -4,6 +4,7 @@ import { ScrollTop } from './ScrollTop';
 import { Filter } from './Filter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { isMobile } from 'react-device-detect';
 
 export const Header = ({ onSearchTermChange }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -63,9 +64,12 @@ export const Header = ({ onSearchTermChange }) => {
   return (
     <>
       <div
-        className={`fixed top-0 left-1/2 translate-x-[-50%] w-full h-auto z-20 pt-[50px] px-8 pb-[15px] ${
+        className={`
+        ${isMobile ? `relative px-0` : `fixed px-8`}
+        top-0 left-1/2 translate-x-[-50%] w-full h-auto z-20 pt-[50px] pb-[15px] ${
           showScrollTop && `bg-white/80`
-        }`}
+        }
+        `}
       >
         <h1 className="font-bold text-5xl mb-9 sm:text-6xl">
           <Link
