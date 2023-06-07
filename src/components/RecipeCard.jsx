@@ -9,6 +9,7 @@ export const RecipeCard = ({ searchTerm, onRecipeClick }) => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [results, setResults] = useState([]);
+  const [prevResults, setPrevResults] = useState([]);
   const DEFAULT_SHOW_CARD = 6;
 
   const showCard = async () => {
@@ -74,10 +75,13 @@ export const RecipeCard = ({ searchTerm, onRecipeClick }) => {
   }, [searchTerm]);
 
   useEffect(() => {
-    if (page > 1) {
+    const isDifferentPrevResults =
+      JSON.stringify(results) !== JSON.stringify(prevResults);
+    if (page > 1 && isDifferentPrevResults) {
       fetchMoreData();
     }
-  }, [page]);
+    setPrevResults(results);
+  }, [page, results, prevResults]);
 
   return (
     <div>
@@ -91,7 +95,6 @@ export const RecipeCard = ({ searchTerm, onRecipeClick }) => {
             <InfiniteScroll
               dataLength={cards.length}
               next={fetchMoreData}
-              // next={false}
               hasMore={hasMore}
               loader={
                 <p className="w-full text-center font-medium text-xl text-korean-blue">
